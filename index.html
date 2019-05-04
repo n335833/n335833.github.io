@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title></title>
+</head>
+<script type="text/javascript">
+
+    var tableNode;
+    function createTable() {
+        tableNode = document.createElement("table"); //獲得物件
+
+        for (var x = 0; x < 15; x++) {
+            var trNode = tableNode.insertRow();
+            for (var y = 0; y < 12; y++) {
+                var tdNode = trNode.insertCell();
+                tdNode.innerHTML = "<div  style=\"width:120%; border: 0.1px solid gray\"  onclick=display(this) id=" + x + "a" + y + " >" + "　" + "</div>";
+            }
+        }
+        document.getElementById("div1").appendChild(tableNode); //新增到那個位置
+
+        block("3a1");
+        block("3a2");
+        block("3a3");
+        block("3a4");
+        block("3a7");
+        block("3a8");
+        block("3a9");
+        block("3a10");
+        block("4a1");
+        block("5a1");
+        block("6a1");
+        block("9a1");
+        block("10a1");
+        block("11a1");
+        block("4a10");
+        block("5a10");
+        block("6a10");
+        block("7a10");
+        block("8a10");
+        block("9a10");
+        block("10a10");
+        block("11a10");
+        deploy("0a3", "12");
+        deploy("0a4", "10");
+        deploy("0a5", "8");
+        deploy("0a6", "6");
+        deploy("0a7", "4");
+        deploy("0a8", "2");
+        deploy("1a3", "11");
+        deploy("1a4", "9");
+        deploy("1a5", "7");
+        deploy("1a6", "5");
+        deploy("1a7", "3");
+        deploy("1a8", "1");
+
+    }
+    function block(name) {
+        document.getElementById(name).textContent = ".";
+        document.getElementById(name).style.background = '#000000';
+    }
+    function deploy(name, text) {
+        document.getElementById(name).textContent = text;
+    }
+    function display(item) {
+        if (item.textContent == "　") {
+
+            item.style.background = '#ABAD00';
+            //    item.textContent = "";
+        }
+        else if (item.textContent == "_") {
+            if (document.getElementById("div2").textContent = "M") {
+
+                document.getElementById("div2").textContent = "";
+                for (var x = 0; x < 15; x++) {
+                    for (var y = 0; y < 12; y++) {
+                        var item2 = document.getElementById(x + "a" + y)
+                        if (item2.textContent === document.getElementById("div3").textContent) {
+                            item2.textContent = "　"
+                        }
+                        if (item2.textContent == "_") {
+                            item2.textContent = "　"
+                            if (item2.textContent = "　") {
+                                item2.style.background = '#FFFFFF';
+                            }
+                        }
+
+                    }
+                }
+                item.textContent = document.getElementById("div3").textContent + ".";
+            }
+
+        }
+        else {
+            if (item.textContent.indexOf('.') < 0 && document.getElementById("div2").textContent != "M") {
+                document.getElementById("div2").textContent = "M";
+                document.getElementById("div3").textContent = item.textContent;
+                for (var x = 0; x < 15; x++) {
+                    for (var y = 0; y < 12; y++) {
+                        var item2 = document.getElementById(x + "a" + y)
+                        if (distance(item, item2) < 5) {
+                            if (item2.textContent == "　") {
+                                item2.style.background = '#AABBFF';
+                                item2.textContent = "_";
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
+    }
+    function distance(item1, item2) {
+
+        var ax = item1.id.split('a')[0];
+        var ay = item1.id.split('a')[1];
+        var bx = item2.id.split('a')[0];
+        var by = item2.id.split('a')[1];
+        var dis = Math.abs(item2.id.split('a')[0] - item1.id.split('a')[0]) + Math.abs(item2.id.split('a')[1] - item1.id.split('a')[1]);
+        if (dis == 1) {
+            return 1;
+        } else {
+            return dis
+            //   return distance(item1, document.getElementById(ax + "a" + ay)) + dis - 1
+            //    return (distance(item1, document.getElementById(ax + "a" + (ay - 1))) + distance(item2, document.getElementById(bx + "a" + (by - 1))));
+
+        }
+
+
+
+        return dis;
+
+
+        // return Math.abs(item2.id.split('a')[0] - item1.id.split('a')[0]) + Math.abs(item2.id.split('a')[1] - item1.id.split('a')[1]);
+
+    }
+    function delRow() {
+        //要刪除行，必須得到table物件才能刪除，所以在建立的時候必須要設定table物件的 id 方便操作
+        var tab = document.getElementById("table"); //獲得table物件
+        if (tab == null) {
+            alert("刪除的表不存在！")
+            return;
+        }
+        var rows = parseInt(document.getElementsByName("delrow1")[0].value); //獲得要刪除的物件
+        if (isNaN(rows)) {
+            alert("輸入的行不正確。請輸入要刪除的行。。。");
+            return;
+        }
+        if (rows >= 1 && rows <= tab.rows.length) {
+            tab.deleteRow(rows - 1);
+        } else {
+            alert("刪除的行不存在！！");
+            return;
+        }
+
+    }
+    //刪除列要麻煩些， 要通過行來進行刪除
+    // 一行的cells的長度就是列的個數
+    //tab.rows[x].deleteCell(cols-1)
+    function delCols() {
+        //獲得table物件
+        var tab = document.getElementById("table");
+
+        if (tab == null) {
+            alert("刪除的表不存在！！");
+            return;
+        }
+        //獲得文字框裡面的內容 
+        var cols = parseInt(document.getElementsByName("delcols1")[0].value);
+        //檢查是否可靠
+        if (isNaN(cols)) {
+            alert("輸入不正確。請輸入要輸出的列。。");
+            return;
+        }
+        if (!(cols >= 1 && cols < tab.rows[0].cells.length)) {
+            alert("您要刪除的行不存在！！");
+            return;
+        }
+        for (var x = 0; x < tab.rows.length; x++) {//所有的行
+            tab.rows[x].deleteCell(cols - 1);
+        }
+    }
+
+</script>
+<body onload="createTable()">
+    <form id="form1" runat="server" >
+
+  
+
+   <div id="div1"></div> 
+   <div id="div2"></div>
+    <div id="div3"></div>
+    </form>
+</body>
+</html>
